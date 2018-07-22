@@ -27,4 +27,12 @@ sudo systemctl start docker
 echo "Starting fail2ban..."
 sudo systemctl start fail2ban
 
+echo "Setting up SSH keys"
+yes ~/.ssh/id_rsa |ssh-keygen -q -t rsa -b 4096 -C "CentOS" -N '' >/dev/null
+eval "$(ssh-agent -s)"
+chmod 400 ~/.ssh/id_rsa
+ssh-add ~/.ssh/id_rsa
 
+echo "Your ssh public key: \n\n"
+cat ~/.ssh/id_rsa.pub
+echo "\n\n"
