@@ -28,6 +28,7 @@ echo "Starting fail2ban..."
 sudo systemctl start fail2ban
 
 echo "Setting up SSH keys"
+pkill ssh-agent
 yes ~/.ssh/id_rsa |ssh-keygen -q -t rsa -b 4096 -C "CentOS" -N '' >/dev/null
 eval "$(ssh-agent -s)"
 chmod 400 ~/.ssh/id_rsa
