@@ -29,7 +29,13 @@ sudo systemctl start fail2ban
 
 echo "Setting up SSH keys"
 pkill ssh-agent
-yes ~/.ssh/id_rsa |ssh-keygen -q -t rsa -b 4096 -C "CentOS" -N '' >/dev/null
+
+# Only creates a new SSH_KEY if it doesn't exist
+SSH_PRIVATE_KEY=~/.ssh/id_rsa
+if [ ! -f $SSH_PRIVATE_KEY ]; then
+  yes ~/.ssh/id_rsa |ssh-keygen -q -t rsa -b 4096 -C "CentOS" -N '' >/dev/null
+fi
+
 eval "$(ssh-agent -s)"
 chmod 400 ~/.ssh/id_rsa
 ssh-add ~/.ssh/id_rsa
@@ -37,3 +43,10 @@ ssh-add ~/.ssh/id_rsa
 echo "Your ssh public key: \n\n"
 cat ~/.ssh/id_rsa.pub
 echo "\n\n"
+
+echo "Setting up docker-compose"
+sudo yum install -y epel-release
+sudo yum install -y python-pip
+sudo yum upgrade python*
+
+echo "\n\nDone\n\n"
