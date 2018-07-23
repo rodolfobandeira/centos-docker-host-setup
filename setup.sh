@@ -48,5 +48,6 @@ echo "Setting up docker-compose"
 sudo yum install -y epel-release
 sudo yum install -y python-pip
 sudo yum upgrade python*
+sudo pip install docker-compose
 
 echo "\n\nDone\n\n"
