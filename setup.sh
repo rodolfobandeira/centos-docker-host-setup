@@ -4,28 +4,28 @@
 # Setting up Docker Repository
 
 echo "Configuring Docker Repository..."
-sudo yum install -y yum-utils \
+yum install -y yum-utils \
   device-mapper-persistent-data \
   lvm2
 
-sudo yum-config-manager \
+yum-config-manager \
     --add-repo \
     https://download.docker.com/linux/centos/docker-ce.repo
 
 echo "Updating yum repositories..."
-sudo yum -y update
+yum -y update
 
 echo "Installing docker..."
-sudo yum -y install docker-ce
+yum -y install docker-ce
 
 echo "htop, vim, git, fail2ban"
-sudo yum -y install htop, vim, git, fail2ban
+yum -y install htop, vim, git, fail2ban
 
 echo "Starting docker..."
-sudo systemctl start docker
+systemctl start docker
 
 echo "Starting fail2ban..."
-sudo systemctl start fail2ban
+systemctl start fail2ban
 
 echo "Setting up SSH keys"
 pkill ssh-agent
@@ -45,10 +45,21 @@ cat ~/.ssh/id_rsa.pub
 echo "\n\n"
 
 echo "Setting up docker-compose"
-sudo yum install -y epel-release
-sudo yum install -y python-pip
-sudo yum upgrade python*
+yum install -y epel-release
+yum install -y python-pip
+yum upgrade python*
 pip install --upgrade pip
-sudo pip install docker-compose
+pip install docker-compose
+
+SWAP_FILE=/swapfile2GB
+if [ ! -f $SWAP_FILE ]; then
+  echo "Creating an extra 2GB swapfile"
+  dd if=/dev/zero of=/swapfile2GB bs=1M count=2048
+  mkswap /swapfile2GB
+  chmod 600
+  swapon /swapfile2GB
+  echo 'echo "/swapfile  none  swap  defaults  0  0" >> /etc/fstab' | sudo sh
+  free -m
+fi
 
 echo "\n\nDone\n\n"
